@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import PROTECT
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+# User = get_user_model()
 
 class Category(models.Model):
     title = models.CharField(
@@ -34,7 +35,7 @@ class Image(models.Model):
 
 #TODO: create user
 class Product(models.Model):
-    # user =
+    # user = models.ForeignKey(User, on_delete=CASCADE)
     category = models.ForeignKey(
         Category,
         on_delete=models.PROTECT,
@@ -77,7 +78,7 @@ class Product(models.Model):
 
 #TODO create user
 class Rating(models.Model):
-    #user
+    # user = models.ForeignKey(User, on_delete=CASCADE)
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
@@ -107,7 +108,7 @@ class Rating(models.Model):
 
    #TODO: create user
 class RatingAnswer(models.Model):
-    #user =
+    # user = models.ForeignKey(User, on_delete=CASCADE)
     rating = models.ForeignKey(
         Rating,
         on_delete=models.CASCADE,
@@ -145,7 +146,7 @@ class Order(models.Model):
         on_delete=models.PROTECT,
         verbose_name='Order'
     )
-    # user =
+
     created_at = models.DateTimeField(
         auto_now=True,
         verbose_name='Created at')
