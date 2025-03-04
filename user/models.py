@@ -1,7 +1,5 @@
-from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
-
 
 class MyUserManager(BaseUserManager):
     def create_user(self, email, phone_number, first_name, password=None):
@@ -67,6 +65,9 @@ class MyUser(AbstractBaseUser):
         ),
         default=1,
         verbose_name='Role'
+    )
+    created_date = models.DateTimeField(
+        auto_now_add=True
     )
 
     is_admin = models.BooleanField(

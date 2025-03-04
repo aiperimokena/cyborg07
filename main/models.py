@@ -1,10 +1,12 @@
+from django.contrib.auth import get_user_model
 from tkinter.constants import CASCADE
 
 from django.db import models
 from django.db.models import PROTECT
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-# User = get_user_model()
+
+User = get_user_model()
 
 class Category(models.Model):
     title = models.CharField(
@@ -35,7 +37,7 @@ class Image(models.Model):
 
 #TODO: create user
 class Product(models.Model):
-    # user = models.ForeignKey(User, on_delete=CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(
         Category,
         on_delete=models.PROTECT,
@@ -78,7 +80,7 @@ class Product(models.Model):
 
 #TODO create user
 class Rating(models.Model):
-    # user = models.ForeignKey(User, on_delete=CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
@@ -99,8 +101,8 @@ class Rating(models.Model):
         auto_now_add=True
     )
 
-    # def __str__(self):
-    #     return str(self.title)
+    def __str__(self):
+        return str(self.title)
 
     class Meta:
         verbose_name = 'Rating'
@@ -108,7 +110,7 @@ class Rating(models.Model):
 
    #TODO: create user
 class RatingAnswer(models.Model):
-    # user = models.ForeignKey(User, on_delete=CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.ForeignKey(
         Rating,
         on_delete=models.CASCADE,
