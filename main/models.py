@@ -41,13 +41,17 @@ class Product(models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.PROTECT,
-        verbose_name='Category')
+        verbose_name='Product')
 
     title = models.CharField(
         max_length=123,
         verbose_name='Title'
     )
-
+    main_image = models.ImageField(
+        upload_to='medai/main_image',
+        verbose_name='Main photo',
+        help_text= ' Picture that will be the cover page no webcite'
+    )
     images = models.ManyToManyField(
         Image,
         verbose_name='Image')
@@ -72,8 +76,8 @@ class Product(models.Model):
 
 
     class Meta:
-        verbose_name = 'Product display'
-        verbose_name_plural = 'Products display'
+        verbose_name = 'Product'
+        verbose_name_plural = 'Products'
 
     def __str__(self):
         return self.title
