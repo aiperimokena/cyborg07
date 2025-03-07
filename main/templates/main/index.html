@@ -70,7 +70,7 @@ https://templatemo.com/tm-579-cyborg-gaming
                         <li><a href="details.html">Details</a></li>
                         <li><a href="streams.html">Streams</a></li>
                         <li><a href="profile.html">Profile <img src="{% static 'assets/images/profile-header.jpg' %}" alt=""></a></li>
-                    </ul>   
+                    </ul>
                     <a class='menu-trigger'>
                         <span>Menu</span>
                     </a>
@@ -97,6 +97,23 @@ https://templatemo.com/tm-579-cyborg-gaming
                   <div class="main-button">
                     <a href="browse.html">Browse Now</a>
                   </div>
+                  {% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+      <div class="alert
+        {% if message.tags == 'error' %}alert-danger
+        {% elif message.tags == 'success' %}alert-success
+        {% elif message.tags == 'warning' %}alert-warning
+        {% else %}alert-info{% endif %}
+        alert-dismissible fade show" role="alert">
+
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
                 </div>
               </div>
             </div>
