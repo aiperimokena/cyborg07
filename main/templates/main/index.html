@@ -68,8 +68,15 @@ https://templatemo.com/tm-579-cyborg-gaming
                         <li><a href="index.html" class="active">Home</a></li>
                         <li><a href="browse.html">Browse</a></li>
                         <li><a href="details.html">Details</a></li>
-                        <li><a href="streams.html">Streams</a></li>
-                        <li><a href="profile.html">Profile <img src="{% static 'assets/images/profile-header.jpg' %}" alt=""></a></li>
+                        {% if request.user.is_authenticated %}
+                          <li><a href="#">{{ request.user.first_name }}</a></li>
+                          <li><a href="{% url 'logout' %}">Exit</a></li>
+                        {% else %}
+                          <li><a href="{% url 'login' %}">Login</a></li>
+                          <li><a href="{% url 'register' %}">Register</a></li>
+                        {% endif %}
+
+                        <li><a href="profile.html">Profile<img src="{% static 'assets/images/profile-header.jpg' %}" alt=""></a></li>
                     </ul>
                     <a class='menu-trigger'>
                         <span>Menu</span>

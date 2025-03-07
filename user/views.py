@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 from .forms import UserRegisterForm
 
@@ -36,3 +36,8 @@ def user_login_view(request):
             messages.error(request, "Wrong login or password")
 
     return render(request, 'account/user_login.html')
+
+def user_logout_view(request):
+    logout(request)
+    messages.success(request, 'You have been logged out!')
+    return redirect('index')
