@@ -1,56 +1,35 @@
 {% load static %}
 <html lang="en">
 <head>
+  <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <title>Cyborg - Awesome HTML5 Template</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
 
     <!-- Additional CSS Files -->
     <link rel="stylesheet" href="{% static 'assets/css/fontawesome.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/templatemo-cyborg-gaming.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/animate.css' %}">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link rel="stylesheet"href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+<!--
 
-    <!-- Custom CSS (Optional for further tweaks) -->
-    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+TemplateMo 579 Cyborg Gaming
 
-    <style>
-        /* Custom Modal Styling */
-        .custom-modal {
-            background: rgba(10, 10, 10, 0.95); /* Dark background */
-            border: 2px solid #ffcc00; /* Neon yellow border */
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
-        }
+https://templatemo.com/tm-579-cyborg-gaming
 
-        .custom-modal .modal-header {
-            border-bottom: 1px solid #ffcc00;
-        }
-
-        .custom-modal .modal-title {
-            font-weight: bold;
-            color: #ffcc00;
-        }
-
-        .custom-modal .modal-footer {
-            border-top: 1px solid #ffcc00;
-        }
-
-        .custom-modal .btn-close {
-            filter: invert(1);
-        }
-    </style>
+-->
+  </head>
 </head>
 <body>
-
 {% if messages %}
   <div class="container mt-3">
     {% for message in messages %}
@@ -60,6 +39,7 @@
         {% elif message.tags == 'warning' %}alert-warning
         {% else %}alert-info{% endif %}
         alert-dismissible fade show" role="alert">
+
         {{ message }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
@@ -67,52 +47,93 @@
   </div>
 {% endif %}
 
-<!-- Modal Structure with CSRF Token -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content custom-modal">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Custom Cyborg Modal</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Form with CSRF Token -->
-        <form method="POST" action="{% url 'product_update' product.id%}" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ product_update_form.as_p }}
-          <!-- Example Form Fields -->
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-warning">Save changes</button>
+
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
     </div>
   </div>
-</div>
+  <!-- ***** Preloader End ***** -->
 
-{% block content %}
-{% endblock %}
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="index.html" class="logo">
+                        <img src="{% static 'assets/images/logo.png' %}" alt="">
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Search End ***** -->
+                    <div class="search-input">
+                      <form id="search" action="#">
+                        <input type="text" placeholder="Type Something" id='searchText' name="searchKeyword" onkeypress="handle" />
+                        <i class="fa fa-search"></i>
+                      </form>
+                    </div>
+                    <!-- ***** Search End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a href="{% url 'index' %}" class="active">Main Page</a></li>
+<!--                        <li><a href="browse.html">All products</a></li>-->
 
-<footer>
+                        <li><a href="product_details">Details</a></li>
+                        {% if not request.user.is_authenticated %}
+                            <li><a href="{% url 'login' %}">Login</a></li>
+                            <li><a href="{% url 'register' %}">Register</a></li>
+                        {% else %}
+                            <li><a href="{% url 'product_create' %}" class="active">Create Publication</a></li>
+                            <li><a href="#">{{ request.user.first_name }}</a></li>
+                            <li><a href="{% url 'logout' %}">Exit</a></li>
+                        {% endif %}
+
+                        <li><a href="profile.html">Profile<img src="{% static 'assets/images/profile-header.jpg' %}" alt=""></a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+    {% block content %}
+
+    {% endblock %}
+
+  <footer>
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
           <p>Copyright © 2036 <a href="#">Cyborg Gaming</a> Company. All rights reserved.
+
           <br>Design: <a href="https://templatemo.com" target="_blank" title="free CSS templates">TemplateMo</a></p>
         </div>
       </div>
     </div>
-</footer>
+  </footer>
 
-<!-- Scripts -->
-<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'assets/js/isotope.min.js' %}"></script>
-<script src="{% static 'assets/js/owl-carousel.js' %}"></script>
-<script src="{% static 'assets/js/tabs.js' %}"></script>
-<script src="{% static 'assets/js/popup.js' %}"></script>
-<script src="{% static 'assets/js/custom.js' %}"></script>
+  <!-- Scripts -->
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+
+  <script src="{% static 'assets/js/isotope.min.js' %}"></script>
+  <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
+  <script src="{% static 'assets/js/tabs.js' %}"></script>
+  <script src="{% static 'assets/js/popup.js' %}"></script>
+  <script src="{% static 'assets/js/custom.js' %}"></script>
 
 </body>
 </html>
