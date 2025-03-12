@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<header class="header-area header-sticky">
+    <div class="container">
+        <nav class="main-nav">
+            <a href="#" class="logo">CYBORG</a>
+            <ul class="nav">
+                <li><a href="#" class="active">Main Page</a></li>
+                <li><a href="#">All Products</a></li>
+                <li><a href="#">Details</a></li>
+                <li><a href="#" id="openModal">Create Publication</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- Modal Structure -->
+<div id="modalForm" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Update Product</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" value="{{ product.name }}" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="{{ product.email }}" required>
+
+            <label for="details">Details</label>
+            <textarea id="details" name="details" required>{{ product.details }}</textarea>
+
+            <button type="submit" class="btn-submit">Update</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    var modal = document.getElementById("modalForm");
+    var btn = document.getElementById("openModal");
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+{% endblock %}
