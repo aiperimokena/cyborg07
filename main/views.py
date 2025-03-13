@@ -10,7 +10,7 @@ def index_view(request):
 
 def product_details(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    product_update_form = ProductUpdateForm()
+    product_update_form = ProductUpdateForm(instance=product)
 
     similar_products = Product.objects.filter(category=product.category).exclude(id=product_id)
 
@@ -40,5 +40,9 @@ def product_update_view(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
     if request.user.is_authenticated and request.user.is_admin:
-        return render(request, 'main/product_update_modal.html',{'product_update': product_update})
-    return redirect('index')
+        if request.method == 'POST':
+            form = ProductUpdateForm(request.POST, request.FILES, instance=product)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Changed!")
+                return redirect('product_details', product_id)
