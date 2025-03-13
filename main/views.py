@@ -37,4 +37,8 @@ def product_create_view(request):
     return render(request, 'main/product_create.html', {'form': form})
 
 def product_update_view(request, product_id):
-    return render(request, 'main/product_update_modal.html')
+    product = get_object_or_404(Product, id=product_id)
+
+    if request.user.is_authenticated and request.user.is_admin:
+        return render(request, 'main/product_update_modal.html',{'product_update': product_update})
+    return redirect('index')
