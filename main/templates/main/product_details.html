@@ -9,24 +9,24 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="featured-games header-text">
-                            <div>
-                                <h5>{{ product.title }}</h5> <!-- Display the product title -->
-                            </div>
+                            <h5>{{ product.title }}</h5>
                             <div class="product-image">
-                                <img src="{{ product.main_image.url }}" alt="{{ product.title }}" class="img-fluid"> <!-- Display product image -->
+                                <img src="{{ product.main_image.url }}" alt="{{ product.title }}" class="img-fluid">
                             </div>
+
                             {% if request.user.is_authenticated and request.user.is_admin %}
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#updateProductModal">
                                     <h5>Change</h5>
                                 </a>
+                                <p><strong style="color: #e75e8d;">Average Rating: </strong> {{ rating_avg|default:"No ratings yet"|floatformat:2 }}</p>
                             {% endif %}
-                            <!-- Modal Structure -->
+
                             <div class="modal fade" id="updateProductModal" tabindex="-1" aria-labelledby="updateProductModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="updateProductModalLabel">Update Product</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <h5 class="modal-title">Update Product</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
                                             <form method="POST" action="{% url 'product_update' product.id %}" enctype="multipart/form-data">
@@ -44,78 +44,109 @@
                         </div>
                     </div>
 
+
                     <div class="col-lg-4">
                         <div class="top-downloaded">
-                            <div class="heading-section">
-                                <h4><em>{{ product.title }}</em> </h4>
-                            </div>
-                            <ul>
-                                <li>
-                                    <img src="{% static 'assets/images/game-01.jpg' %}" alt="" class="templatemo-item">
-                                    <h4>Fortnite</h4>
-                                    <h6>Sandbox</h6>
-                                    <span><i class="fa fa-star" style="color: yellow;"></i> 4.9</span>
-                                    <span><i class="fa fa-download" style="color: #ec6090;"></i> 2.2M</span>
-                                    <div class="download">
-                                        <a href="#"><i class="fa fa-download"></i></a>
-                                    </div>
+                            <h4><em>{{ product.title }}</em></h4>
+                            <p>No reviews yet. Be the first to leave a review!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-section mt-5">
+                    <h4>Customer Reviews</h4>
+                    {% if product_comments %}
+                        <ul class="reviews-list">
+                            {% for rating in product_comments %}
+                                <li class="review-item" style="color:pink; margin-bottom: 20px;">
+                                    <p><strong>{{ rating.user.first_name }}</strong> (Rating: {{ rating.count }})</p>
+                                    <p style="color:white;">{{ rating.comment }}</p>
+
+                                    <!-- Display replies to the comment -->
+                                    {% if rating.rating_answers.all %}
+                                        <div class="replies" style="padding-left: 20px; margin-top: 15px; background-color: #f8f8f8; border-radius: 5px; padding: 10px; border-left: 4px solid #e75e8d;">
+                                            <h5 style="color: #e75e8d;">Replies:</h5>
+                                            {% for reply in rating.rating_answers.all %}
+                                                <div style="margin-bottom: 10px; background-color: #ffffff; border-radius: 5px; padding: 10px;">
+                                                    <p><strong style="color: #e75e8d;">{{ reply.user.first_name }}:</strong> {{ reply.comment }}</p>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        <p style="font-style: italic; color: gray;">No replies yet.</p>
+                                    {% endif %}
+
+                                    <!-- Reply Button -->
+                                    <button class="reply-btn" style="background-color: pink; border-color: pink; color: white; margin-top: 10px;"
+                                            data-bs-toggle="modal" data-bs-target="#replyModal" data-rating-id="{{ rating.id }}">Reply</button>
                                 </li>
-                                <!-- More list items here -->
-                            </ul>
-                            <div class="text-button">
-                                <a href="profile.html">View All Games</a>
+                            {% endfor %}
+
+                        </ul>
+                    {% else %}
+                        <p>No reviews yet. Be the first to leave a review!</p>
+                    {% endif %}
+                </div>
+
+
+                <div class="modal fade" id="replyModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Reply to the comment</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'rating_answer_create' 0 %}" method="post" id="replyForm">
+                                    {% csrf_token %}
+                                    <textarea name="comment"></textarea>
+                                    <button type="submit">Send</button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="live-stream">
-                    <div class="heading-section">
-                        <h4><em>Most Popular</em></h4>
-                    </div>
-                    <div class="row">
-                        {% for similar_product in similar_products %}
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="item">
-                                <div class="thumb">
-                                    <img src="{{ similar_product.main_image.url }}" alt="">
-                                    <div class="hover-effect">
-                                        <div class="content">
-                                            <div class="live">
-                                                <a href="#">Live</a>
-                                            </div>
-                                            <ul>
-                                                <li><a href="#"><i class="fa fa-eye"></i> 1.2K</a></li>
-                                                <li><a href="#"><i class="fa fa-gamepad"></i> CS-GO</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="down-content">
-                                    <div class="avatar">
-                                        {% if similar_product.user.avatar %}
-                                        <img src="{{ similar_product.user.avatar.url }}" alt="" style="max-width: 46px; border-radius: 50%; float: left;">
-                                        {% else %}
-                                        <img src="{% static 'assets/images/avatar-01.jpg' %}" alt="" style="max-width: 46px; border-radius: 50%; float: left;">
-                                        {% endif %}
-                                    </div>
-                                    <span><i class="fa fa-check"></i>{{ similar_product.user.first_name }}</span>
-                                    <h4>{{ similar_product.title }}</h4>
-                                </div>
-                            </div>
+                {% if user.is_authenticated %}
+                    <form action="{% url 'rating_create' product.id %}" method="POST">
+                        {% csrf_token %}
+                        <h6>Leave a Review about the Product:</h6>
+                        <div id="star-rating">
+                            {% for i in "12345"|make_list %}
+                                <i class="fa fa-star star" data-value="{{ forloop.counter }}" style="color: gray; font-size: 24px; cursor: pointer;"></i>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="main-button">
-                            <a href="streams.html">Discover All Streams</a>
-                        </div>
-                    </div>
-                </div>
+                        <input type="hidden" id="selected-rating" name="count" value="0">
+                        <textarea name="comment" rows="2" placeholder="Write your review..."></textarea>
+                        <button type="submit">Submit Review</button>
+                    </form>
+                {% else %}
+                    <p>You need to be logged in to submit a review.</p>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 
-{% endblock %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".star").forEach(star => {
+        star.addEventListener("click", function () {
+            let rating = this.getAttribute("data-value");
+            document.getElementById("selected-rating").value = rating;
+            document.querySelectorAll(".star").forEach(s => {
+                s.style.color = s.getAttribute("data-value") <= rating ? "yellow" : "gray";
+            });
+        });
+    });
 
+    document.querySelectorAll(".reply-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let ratingId = this.getAttribute("data-rating-id");
+            document.getElementById("replyForm").action = `{% url 'rating_answer_create' 0 %}`.replace("0", ratingId);
+        });
+    });
+});
+</script>
+
+{% endblock %}

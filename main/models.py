@@ -82,7 +82,7 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
-#TODO create user
+
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(
@@ -106,19 +106,20 @@ class Rating(models.Model):
     )
 
     def __str__(self):
-        return str(self.title)
+        return f'{self.user} --> {self.product}'
 
     class Meta:
         verbose_name = 'Rating'
         verbose_name_plural = 'Ratings'
 
-   #TODO: create user
+
 class RatingAnswer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.ForeignKey(
         Rating,
         on_delete=models.CASCADE,
-        verbose_name='Rating reply'
+        verbose_name='Rating reply',
+        related_name='rating_answers'
     )
     comment = models.TextField(
         verbose_name='Comment',
@@ -144,7 +145,8 @@ class RatingAnswer(models.Model):
         verbose_name = 'Reply to the comment'
         verbose_name_plural = 'Replies to the comments'
 
-    # def __str__
+    def __str__(self):
+        return f'{self.user} --> {self.rating}'
 
 class Order(models.Model):
     product = models.ForeignKey(

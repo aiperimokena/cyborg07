@@ -30,23 +30,6 @@ https://templatemo.com/tm-579-cyborg-gaming
   </head>
 </head>
 <body>
-{% if messages %}
-  <div class="container mt-3">
-    {% for message in messages %}
-      <div class="alert
-        {% if message.tags == 'error' %}alert-danger
-        {% elif message.tags == 'success' %}alert-success
-        {% elif message.tags == 'warning' %}alert-warning
-        {% else %}alert-info{% endif %}
-        alert-dismissible fade show" role="alert">
-
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {% endfor %}
-  </div>
-{% endif %}
-
 
   <!-- ***** Preloader Start ***** -->
   <div id="js-preloader" class="js-preloader">
@@ -68,7 +51,7 @@ https://templatemo.com/tm-579-cyborg-gaming
             <div class="col-12">
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="index.html" class="logo">
+                    <a href="{% url 'index' %}" class="logo">
                         <img src="{% static 'assets/images/logo.png' %}" alt="">
                     </a>
                     <!-- ***** Logo End ***** -->
@@ -107,6 +90,27 @@ https://templatemo.com/tm-579-cyborg-gaming
     </div>
   </header>
   <!-- ***** Header Area End ***** -->
+    <br><br><br>
+    <div class="container mt-7 py-5 d-flex justify-content-center">
+        <div class="col-md-6">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert
+                        {% if message.tags == 'error' %}alert-danger
+                        {% elif message.tags == 'success' %}alert-success
+                        {% elif message.tags == 'warning' %}alert-warning
+                        {% else %}alert-info{% endif %}
+                        alert-dismissible fade show" role="alert">
+
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+
 
     {% block content %}
 

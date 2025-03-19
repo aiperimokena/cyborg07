@@ -26,3 +26,4 @@ class ProductUpdateForm(forms.ModelForm):
             'price',
             'quantity'
         )
+
