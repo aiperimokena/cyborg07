@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from tkinter.constants import CASCADE
+from .choices import OrderStatusEnum
 
 from django.db import models
 from django.db.models import PROTECT
@@ -149,28 +150,83 @@ class RatingAnswer(models.Model):
         return f'{self.user} --> {self.rating}'
 
 class Order(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='orders',
+        verbose_name='User'
+    )
     product = models.ForeignKey(
         Product,
         on_delete=models.PROTECT,
-        verbose_name='Order'
+        verbose_name='Product',
+        related_name='orders'
     )
 
-    created_at = models.DateTimeField(
+    created_date = models.DateTimeField(
         auto_now=True,
-        verbose_name='Created at')
+        verbose_name='Created date')
+
+    is_paid = models.BooleanField(
+        verbose_name='Accepted',
+        default=False
+    )
 
     title = models.TextField(
         verbose_name='Text'
     )
-    quantity = models.PositiveIntegerField(
-        verbose_name='Quantity'
+    quantity = models.PositiveSmallIntegerField(
+        verbose_name='Quantity',
+        default=1
+
+    )
+    check_image = models.ImageField(
+        verbose_name='Check',
+        upload_to='media/check'
+    )
+    status = models.CharField(
+        choices=OrderStatusEnum.choices,
+        default=OrderStatusEnum.IN_PROCESSING,
+        verbose_name='Payment option',
+        max_length=15
+    )
+    updated_date = models.DateTimeField(
+        auto_now=True,
+        verbose_name='Updated date'
     )
 
     class Meta:
-        verbose_name = 'Order'
-        verbose_name_plural = 'Orders'
+        verbose_name = 'Payment request'
+        verbose_name_plural = 'Payment requests'
 
 
     def __str__(self):
-        return self.title
+        return f"{self.user} --> {self.product}"
+
+class PaymentMethod(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='payment_methods',
+        verbose_name='user'
+    )
+    title = models.CharField(
+        max_length=123,
+        verbose_name='Title'
+    )
+    qr_image = models.ImageField(
+        upload_to='media/qr',
+        verbose_name='QR'
+    )
+    created_date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Date created'
+    )
+    class Meta:
+        verbose_name = 'Payment method',
+        verbose_name_plural = 'Payment methods'
+
+    def __str__(self):
+        return f"{self.user} --> {self.title}"
+
 

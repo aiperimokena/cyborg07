@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Payment page styling */
+    .payment-container {
+        background-color: #1e1e1e;
+        color: #e75e8d;
+        font-family: 'Roboto', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+    }
+
+    .payment-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .payment-header h1 {
+        font-size: 3rem;
+        color: #e75e8d;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        text-shadow: 0 0 10px #e75e8d, 0 0 20px #e75e8d, 0 0 30px #e75e8d;
+    }
+
+    .payment-details {
+        background-color: #2c2c2c;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        width: 100%;
+        max-width: 700px;
+    }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .product-info .product-image {
+        width: 100px;
+        height: 100px;
+        margin-right: 20px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .product-info .product-description h3 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: #ffffff;
+    }
+
+    .product-info .product-description p {
+        color: #c1c1c1;
+    }
+
+    .payment-options h2 {
+        font-size: 1.8rem;
+        color: #ffffff;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .payment-method {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .payment-method input[type="radio"] {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+        accent-color: #e75e8d;
+    }
+
+    .payment-method img {
+        width: 40px;
+        height: auto;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+
+    .payment-method span {
+        font-size: 1.2rem;
+        color: #ffffff;
+    }
+
+    .total-amount {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 1.5rem;
+        color: #e75e8d;
+    }
+
+    .upload-proof {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .upload-proof label {
+        display: block;
+        font-size: 1.2rem;
+        color: #ffffff;
+        margin-bottom: 10px;
+    }
+
+    .upload-proof input[type="file"] {
+        display: block;
+        margin: 0 auto;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #ffffff;
+    }
+
+    .btn-pay {
+        background-color: #e75e8d;
+        color: #fff;
+        border: none;
+        padding: 15px 30px;
+        font-size: 1.2rem;
+        border-radius: 8px;
+        width: 100%;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 20px;
+    }
+
+    .btn-pay:hover {
+        background-color: #ff66b3;
+        box-shadow: 0 0 10px rgba(255, 102, 179, 0.7);
+    }
+
+    @media (max-width: 768px) {
+        .payment-container {
+            padding: 20px;
+        }
+
+        .payment-header h1 {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<div class="payment-container">
+    <div class="payment-header">
+        <h1>Secure Payment</h1>
+        <p>Complete your payment for <strong>{{ product.title }}</strong></p>
+    </div>
+
+    <div class="payment-details">
+        <div class="product-info">
+            <img src="{% static 'assets/images/profile.jpg' %}" alt="{{ product.title }}" class="product-image">
+            <div class="product-description">
+                <h3>{{ product.title }}</h3>
+                <p>Price: {{ product.price }}</p>
+            </div>
+        </div>
+
+        <div class="payment-options">
+            <h2>Choose Your Payment Method</h2>
+            {% for payment_method in seller_payment_methods %}
+            <div class="payment-method">
+                <label for="{{ payment_method.name|lower }}">
+                    <input type="radio" id="{{ payment_method.name|lower }}" name="payment-method" value="{{ payment_method.name|lower }}">
+                    <img src="{{ payment_method.qr_image.url }}" alt="{{ payment_method.name }}">
+                    <span>{{ payment_method.name }}</span>
+                </label>
+            </div>
+            {% endfor %}
+
+            <div class="total-amount">
+                <p><strong>Total Amount:</strong> ${{ product.price }}</p>
+            </div>
+        </div>
+
+        <div class="upload-proof">
+            <form method="post" action="." enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="proof-of-payment">Upload Proof of Payment:</label>
+                <input type="file" id="proof-of-payment" name="check_image" accept="image/*,application/pdf">
+                <button type="submit" class="btn btn-pay">Proceed to Payment</button>
+            </form>
+        </div>
+
+
+
+    </div>
+</div>
+{% endblock %}
