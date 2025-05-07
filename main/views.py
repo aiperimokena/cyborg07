@@ -125,12 +125,15 @@ def product_payment_create_view(request, product_id, product_quantity):
         messages.success(request, 'Payment sent to the seller')
         return redirect('index')
 
+    total_price = product.price * product_quantity
+
     return render(
         request=request,
         template_name='main/product_payment.html',
         context={
-            "seller_payment_methods":seller_payment_methods,
             "product": product,
-
+            "seller_payment_methods": seller_payment_methods,
+            "product_quantity": product_quantity,
+            "total_price": total_price,
         }
     )

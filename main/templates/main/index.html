@@ -40,7 +40,8 @@
                         <img src="{{ product.main_image.url }}" alt="">
                         <h4>{{ product.title }}<br><span>{{ product.category }}</span></h4>
                           <ul>
-                            <li><i class="fa fa-star"></i>{{ rating_avg }}</li>
+                            <li><i class="fa fa-star"></i>{{ rating_avg|default:"0" }}</li>
+
                             <li><i class="fa fa-download"></i> 2.3M</li>
                           </ul>
                         </div>

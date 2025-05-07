@@ -1,3 +1,4 @@
+from user.models import MyUser
 from django.contrib.auth import get_user_model
 from tkinter.constants import CASCADE
 from .choices import OrderStatusEnum
@@ -5,6 +6,7 @@ from .choices import OrderStatusEnum
 from django.db import models
 from django.db.models import PROTECT
 from django.core.validators import MaxValueValidator, MinValueValidator
+
 
 
 User = get_user_model()
@@ -228,5 +230,7 @@ class PaymentMethod(models.Model):
 
     def __str__(self):
         return f"{self.user} --> {self.title}"
+
+
 
 

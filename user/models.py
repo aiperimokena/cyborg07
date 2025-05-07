@@ -95,3 +95,12 @@ class MyUser(AbstractBaseUser):
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+
+class OTP(models.Model):
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    code = models.CharField(max_length=6)
+    if_used = models.BooleanField(default=False)
+    created_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user
