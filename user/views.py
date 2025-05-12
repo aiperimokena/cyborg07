@@ -1,20 +1,18 @@
 import random
-
-import ssl
-import certifi
-ssl_context = ssl.create_default_context(cafile=certifi.where())
-ssl._create_default_https_context = ssl_context
-
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 
+
 from .forms import UserRegisterForm
-from .models import OTP
+from .models import OTP, MyUser
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
-
+import certifi
+print(certifi.where())
 
 
 def user_register_view(request):
